@@ -7,7 +7,7 @@
 	<div >
 		<BR/>
 			<form>				
-				<input type="text" class="form-control" placeholder="Search" ng-model="sq">
+				<input type="text" id="searchText" class="form-control" placeholder="Search" ng-model="sq">
 				<BR/>
 
 				<button type="submit" class="btn btn-info btn-xs" ng-click="search()">Blasting Search</button>
@@ -17,11 +17,11 @@
 	</div>
 
 	
-	
 	<hr/>
 	<div>
-		<div align='left'>Number of records found <B>{{dataSources.response.numFound}} </B> </div>
-		<div align='right'><Span>Waited for {{responseHeader.QTime}} milliseconds</div>
+		<div align='left'>Number of records found <B>{{resultSize}} </B> </div>
+		<div align='right'><Span>Waited for {{responseTime}} milliseconds</div>
+
 			<table class="table table-striped">
 				<tr>
 					<th>#</th>
@@ -29,9 +29,9 @@
 					<th>Open</th>
 				</tr>
 				<tbody>
-					<tr ng-repeat="d in dataSources.response.docs">
+					<tr ng-repeat="d in (FilteredItems=(searchResults | filter:searchText)).slice(((currentPage-1)*itemsPerPage), ((currentPage)*itemsPerPage))">
 						
-						<td>1</td>
+						<td>{{d.index}}</td>
 						<td>{{d.id}}</td>
 						<td><button class="btn btn-info btn-xs"><span class="glyphicon glyphicon-new-window" aria-hidden="true"></span></button> </td>
 					</tr>					
@@ -39,6 +39,12 @@
 			</table>
 			
 			<!-- Pagination goes here -->
+			<div style="text-align: center">
+				<pagination total-items="totalItems" ng-model="currentPage" max-size="maxSize" class="pagination-sm" boundary-links="true" rotate="false" num-pages="numPages" items-per-page="itemsPerPage"></pagination>
+			</div>
+
+			<pre> View <select ng-model="viewby" ng-change="setItemsPerPage(viewby)"><option>3</option><option>5</option><option>10</option><option>20</option><option>30</option><option>40</option><option>50</option></select> items per page. Page: {{currentPage}} / {{numPages}}</pre>
+			<!-- Type old
 			<div> <center>
 				<nav aria-label="Page navigation">
 				  <ul class="pagination">
@@ -54,7 +60,7 @@
 					  </a>
 					</li>
 				  </ul>
-				</nav></center>
+				</nav></center>-->
 			</div> <!-- Pagination ends -->
 		</div>
 </div>

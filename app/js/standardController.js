@@ -4,6 +4,8 @@ var standardApp = angular.module('standardApp', [
 	'ngAnimate'
 ]);
 
+
+
 standardApp.directive('ngTabs', function() {
    return function(scope, elm) {
       setTimeout(function() {
@@ -44,9 +46,9 @@ standardApp.config(['$routeProvider', function($routeProvider){
 
 
 // HTML Head Controller
-standardApp.controller("headController",function($scope, $http){
+standardApp.controller("headController",function($scope, $http) {
 
-$scope.title = "Falcon ";
+$scope.title = "Falcon";
 
 });
 
@@ -76,13 +78,39 @@ standardApp.controller("settingsCtrl", function($scope, $http){
 
 // Home Controller
 standardApp.controller("homeCtrl", function($scope, $http){
-	$scope.dataSourcesa = [{ "folder" : "c:/windows/abcdef" },
-					 { "folder" : "d:/backup" },
-					 { "folder" : "d:/contents/books" }					 
-					];
+
+
+	//pagination logic
+	function initData() {
+		$scope.totalItems = $scope.searchResults.length;
+		$scope.currentPage = 1;
+		$scope.maxSize = 5;
+		if($scope.viewby == null)
+		{
+			$scope.viewby = 5;
+			$scope.itemsPerPage = $scope.viewby;
+		}
+	}
+	$scope.setPage = function (pageNo) {
+		$scope.currentPage = pageNo;
+	};
+
+	$scope.pageChanged = function() {
+		console.log('Page changed to: ' + $scope.currentPage);
+	};
+
+	$scope.setItemsPerPage = function(num) {
+	  $scope.itemsPerPage = num;
+	  $scope.currentPage = 1; //reset to first page
+	}
+
+
+	
 	$scope.sq="";
-	$scope.dataSources = "0";
+	$scope.searchResults = "0";
 	$scope.responseHeader = "";
+	$scope.resultSize = 0;
+	$scope.responseTime = 0;
 	
 	var host = "localhost"; // Solr running host
 	var port = "8983"; // Solr running port 
@@ -111,9 +139,12 @@ standardApp.controller("homeCtrl", function($scope, $http){
 			console.log("Status:" + data.status + " :" + data.statusText);
 			
 			
-			$scope.dataSources = data.data;
+			$scope.searchResults = data.data.response.docs;
+			initData();
 			
 			$scope.responseHeader = data.data.responseHeader;			
+			$scope.resultSize = data.data.response.numFound;			
+			$scope.responseTime = $scope.responseHeader.QTime;			
 
 		}, function(data, status, headers, config) {
 			//TODO : No data found needs to be shown in UI
