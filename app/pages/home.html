@@ -1,9 +1,6 @@
 
 
 <div id="home_screen" class="container-fluid">
-
-
-	
 	<div >
 		<BR/>
 			<form>				
@@ -18,10 +15,14 @@
 
 	
 	<hr/>
-	<div>
-		<div align='left'>Number of records found <B>{{resultSize}} </B> </div>
-		<div align='right'><Span>Waited for {{responseTime}} milliseconds</div>
 
+	<div>
+		<div align='left' ng-if="resultSize > 0"> <a class="btn"> Results found <span class="badge"><B>{{resultSize}} </B> </span></a></div>
+		
+		
+		<div align='right' ng-if="resultSize >0"> <a class="btn"> Responded in <Span class="badge"> {{responseTime}} </span> milliseconds </a> </div>
+
+		<div ng-if="resultSize > 0">
 			<table class="table table-striped">
 				<tr>
 					<th>#</th>
@@ -44,6 +45,7 @@
 			</div>
 
 			<pre> View <select ng-model="viewby" ng-change="setItemsPerPage(viewby)"><option>3</option><option>5</option><option>10</option><option>20</option><option>30</option><option>40</option><option>50</option></select> items per page. Page: {{currentPage}} / {{numPages}}</pre>
+		</div>
 			<!-- Type old
 			<div> <center>
 				<nav aria-label="Page navigation">

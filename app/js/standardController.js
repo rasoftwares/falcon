@@ -57,9 +57,9 @@ standardApp.controller("NavController", function($scope, $http){
 
 	$scope.search_title="Go";
 	
-	$scope.menuItems = [{"name":"Home", "url": "/", "onClick":"home"},		
-						{"name":"History", "url": "history" , "onClick":"history"},
-						{"name":"Settings", "url": "settings", "onClick":"settings"}
+	$scope.menuItems = [{"name":"Home", "url": "/", "onClick":"home", "visible" : true},		
+						{"name":"History", "url": "history" , "onClick":"history", "visible" : false},
+						{"name":"Settings", "url": "settings", "onClick":"settings", "visible" : true}
 					   ];
 	
 	$scope.settings = function(){ };
